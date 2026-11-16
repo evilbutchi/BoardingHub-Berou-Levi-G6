@@ -21,7 +21,7 @@ def register(request):
     if request.user.is_authenticated:
         return redirect(request.user.get_dashboard_url())
 
-    form = RegistrationForm(request.POST or None)
+    form = RegistrationForm(request.POST if request.method == "POST" else None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -112,7 +112,12 @@ def profile(request):
 
 @login_required
 def profile_edit(request):
-    form = ProfileForm(request.POST or None, request.FILES or None, instance=request.user)
+    is_post = request.method == "POST"
+    form = ProfileForm(
+        request.POST if is_post else None,
+        request.FILES if is_post else None,
+        instance=request.user,
+    )
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -131,7 +136,7 @@ def user_list(request):
 
 @role_required(User.Role.LANDLORD)
 def caretaker_create(request):
-    form = CaretakerCreationForm(request.POST or None)
+    form = CaretakerCreationForm(request.POST if request.method == "POST" else None)
     if request.method == "POST":
         if form.is_valid():
             user = form.save()
