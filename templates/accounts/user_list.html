@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Accounts{% endblock %}
+
+{% block content %}
+<div class="page-head page-head-row">
+  <div>
+    <h1>Accounts</h1>
+    <p class="muted">Everyone who can sign in to BoardingHub, besides you.</p>
+  </div>
+  <a class="btn btn-primary" href="{% url 'accounts:caretaker_create' %}">Add caretaker</a>
+</div>
+
+<section class="card">
+  {% if users %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Username</th><th>Email</th><th>Contact</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+            <tr>
+              <td>{{ u.display_name }}</td>
+              <td>{{ u.username }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.contact_number|default:"—" }}</td>
+              <td><span class="badge badge-{{ u.role }}">{{ u.get_role_display }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No other accounts yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Caretaker Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Caretaker Dashboard</h1>
+  <p class="muted">Welcome, {{ user.display_name }}. This is your workspace for day-to-day upkeep.</p>
+</div>
+
+<section class="card">
+  <h2>Your responsibilities</h2>
+  <ul class="plain-list">
+    <li>Record monthly utility readings for each room</li>
+    <li>Log maintenance requests and follow them to completion</li>
+  </ul>
+  <p class="muted">These tools will be added in later phases. For now you can keep your <a href="{% url 'accounts:profile' %}">profile</a> up to date.</p>
+</section>
+{% endblock %}

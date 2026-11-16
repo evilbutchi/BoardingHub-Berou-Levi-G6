@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Add Caretaker{% endblock %}
+
+{% block content %}
+<section class="card card-narrow">
+  <h1>Add caretaker</h1>
+  <p class="muted">Create a login for a caretaker. Share the username and password with them securely.</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.first_name %}
+      {% include "accounts/_field.html" with field=form.last_name %}
+    </div>
+    {% include "accounts/_field.html" with field=form.username %}
+    {% include "accounts/_field.html" with field=form.email %}
+    {% include "accounts/_field.html" with field=form.contact_number %}
+    {% include "accounts/_field.html" with field=form.password1 %}
+    {% include "accounts/_field.html" with field=form.password2 %}
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Create caretaker</button>
+      <a class="btn" href="{% url 'accounts:user_list' %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

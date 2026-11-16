@@ -1,0 +1,129 @@
+:root {
+  --bg: #f5f6f4;
+  --surface: #ffffff;
+  --ink: #1f2a26;
+  --muted: #66736d;
+  --line: #dfe4e0;
+  --brand: #1f6f5c;
+  --brand-dark: #17564a;
+  --brand-soft: #e4f1ed;
+  --danger: #b3321f;
+  --danger-soft: #fbeae7;
+  --warn-soft: #fdf3dc;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; padding-top: 28px; padding-bottom: 40px; }
+a { color: var(--brand); }
+a:hover { color: var(--brand-dark); }
+h1 { font-size: 1.6rem; margin: 0 0 4px; }
+h2 { font-size: 1.1rem; margin: 0 0 8px; }
+.muted { color: var(--muted); margin-top: 0; }
+.center { text-align: center; }
+
+.container { width: 100%; max-width: 980px; margin: 0 auto; padding: 0 16px; }
+
+/* Top bar */
+.topbar { background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; flex-wrap: wrap; }
+.brand { font-weight: 700; font-size: 1.25rem; text-decoration: none; color: var(--ink); }
+.brand span { color: var(--brand); }
+.nav { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.nav a { text-decoration: none; color: var(--ink); font-weight: 500; }
+.nav a:hover { color: var(--brand); }
+.nav a.btn-primary { color: #fff; }
+.nav-user { color: var(--muted); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; }
+.inline-form { display: inline; margin: 0; }
+
+/* Cards & layout */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; margin-bottom: 18px; }
+.card-narrow { max-width: 520px; margin-left: auto; margin-right: auto; }
+.card-soft { background: var(--brand-soft); border-color: transparent; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.page-head { margin-bottom: 18px; }
+.page-head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.plain-list { margin: 0 0 8px; padding-left: 18px; }
+.plain-list li { margin: 6px 0; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: flex; flex-direction: column; }
+.stat-num { font-size: 1.9rem; font-weight: 700; color: var(--brand); line-height: 1.1; }
+.stat-label { color: var(--muted); font-size: 0.9rem; }
+
+/* Buttons */
+.btn {
+  display: inline-block; padding: 9px 16px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; text-decoration: none;
+}
+.btn:hover { background: #f0f2f0; color: var(--ink); }
+.btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+.btn-primary:hover { background: var(--brand-dark); color: #fff; }
+.btn-ghost { background: transparent; }
+.btn-sm { padding: 5px 12px; font-size: 0.9rem; }
+.btn-block { display: block; width: 100%; margin-top: 6px; }
+
+/* Forms */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+.field .req { color: var(--danger); }
+.field input[type="text"], .field input[type="email"], .field input[type="password"], .field input[type="tel"] {
+  width: 100%; padding: 9px 11px; border: 1px solid #c9d0cb; border-radius: 8px; font: inherit; background: #fff;
+}
+.field input:focus { outline: 2px solid var(--brand-soft); border-color: var(--brand); }
+.field.has-error input { border-color: var(--danger); }
+.field input[type="file"] { font-size: 0.9rem; }
+.help { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 4px; }
+.help ul { margin: 4px 0 0; padding-left: 18px; }
+.error { display: block; color: var(--danger); font-size: 0.85rem; margin-top: 4px; }
+
+/* Messages */
+.messages { margin-bottom: 18px; }
+.alert { padding: 11px 14px; border-radius: 8px; margin-bottom: 8px; border: 1px solid transparent; }
+.alert-success { background: var(--brand-soft); border-color: #bfdcd3; color: #14463a; }
+.alert-error { background: var(--danger-soft); border-color: #f0c7c0; color: #7d2113; }
+.alert-warning { background: var(--warn-soft); border-color: #f0dfae; color: #6b5210; }
+.alert-info { background: #e8eef7; border-color: #c9d6ea; color: #23406b; }
+
+/* Badges */
+.badge { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: #eceeed; color: #444; }
+.badge-landlord { background: #e4f1ed; color: #17564a; }
+.badge-caretaker { background: #fdf3dc; color: #6b5210; }
+.badge-tenant { background: #e8eef7; color: #23406b; }
+
+/* Profile */
+.profile-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.avatar { border-radius: 50%; object-fit: cover; background: var(--brand-soft); }
+.avatar-lg { width: 84px; height: 84px; }
+.avatar-initials { display: flex; align-items: center; justify-content: center; font-size: 1.7rem; font-weight: 700; color: var(--brand); }
+.details { display: grid; grid-template-columns: 150px 1fr; gap: 8px 12px; margin: 0 0 20px; }
+.details dt { color: var(--muted); font-weight: 600; }
+.details dd { margin: 0; }
+
+/* Table */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.table th { color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.footer { color: var(--muted); font-size: 0.85rem; padding-top: 14px; padding-bottom: 22px; text-align: center; }
+
+@media (max-width: 600px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .details { grid-template-columns: 1fr; gap: 2px; }
+  .details dd { margin-bottom: 8px; }
+}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Landlord Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Landlord Dashboard</h1>
+  <p class="muted">Welcome, {{ user.display_name }}. Manage your boarding house from here.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="stat-num">{{ tenant_count }}</span><span class="stat-label">Registered tenants</span></div>
+  <div class="stat"><span class="stat-num">{{ caretaker_count }}</span><span class="stat-label">Caretakers</span></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2>Account management</h2>
+    <p class="muted">Create caretaker accounts and review everyone who can sign in.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="{% url 'accounts:caretaker_create' %}">Add caretaker</a>
+      <a class="btn" href="{% url 'accounts:user_list' %}">View all accounts</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Recently joined</h2>
+    {% if recent_users %}
+      <ul class="plain-list">
+        {% for u in recent_users %}
+          <li>{{ u.display_name }} <span class="badge badge-{{ u.role }}">{{ u.get_role_display }}</span></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">No other accounts yet.</p>
+    {% endif %}
+  </section>
+</div>
+
+<section class="card card-soft">
+  <h2>Coming in later phases</h2>
+  <p class="muted">Rooms, tenant contracts, utility readings, monthly billing, payments and reports will appear here as they are built.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<section class="card card-narrow">
+  <h1>Create your account</h1>
+  <p class="muted">Register as a tenant to view your room, bills and payments.</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.first_name %}
+      {% include "accounts/_field.html" with field=form.last_name %}
+    </div>
+    {% include "accounts/_field.html" with field=form.username %}
+    {% include "accounts/_field.html" with field=form.email %}
+    {% include "accounts/_field.html" with field=form.contact_number %}
+    {% include "accounts/_field.html" with field=form.password1 %}
+    {% include "accounts/_field.html" with field=form.password2 %}
+    {% for error in form.non_field_errors %}<small class="error">{{ error }}</small>{% endfor %}
+    <button type="submit" class="btn btn-primary btn-block">Create account</button>
+  </form>
+
+  <p class="muted center">Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
+</section>
+{% endblock %}

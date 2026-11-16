@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Tenant Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Tenant Dashboard</h1>
+  <p class="muted">Welcome, {{ user.display_name }}.</p>
+</div>
+
+<section class="card">
+  <h2>What you'll find here</h2>
+  <ul class="plain-list">
+    <li>Your room details and contract</li>
+    <li>Your monthly bills and what you still owe</li>
+    <li>Your payment history</li>
+  </ul>
+  <p class="muted">Your landlord will link your account to a room and contract. These pages are added in later phases. You can update your <a href="{% url 'accounts:profile' %}">profile</a> any time.</p>
+</section>
+{% endblock %}
