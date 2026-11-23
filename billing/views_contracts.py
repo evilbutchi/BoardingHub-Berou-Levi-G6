@@ -12,6 +12,7 @@ from accounts.models import User
 
 from .forms import ContractForm, RoomForm
 from .models import Contract, Room
+from .services import bills_with_payments
 
 LANDLORD = User.Role.LANDLORD
 TENANT = User.Role.TENANT
@@ -110,7 +111,8 @@ def contract_create(request):
 @role_required(LANDLORD)
 def contract_detail(request, pk):
     contract = get_object_or_404(Contract.objects.select_related("tenant", "room"), pk=pk)
-    return render(request, "billing/contract_detail.html", {"contract": contract})
+    bills = bills_with_payments().filter(contract=contract)
+    return render(request, "billing/contract_detail.html", {"contract": contract, "bills": bills})
 
 
 @role_required(LANDLORD)

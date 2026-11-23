@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Utility readings{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Utility readings</h1>
+  <p class="muted">Record each room's electricity and water meter once a month. Saving a reading generates that month's bill.</p>
+</div>
+
+<section class="card">
+  <h2>Record a reading</h2>
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Room</th><th>Tenant</th><th>Last reading</th><th></th></tr></thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td><strong>{{ row.contract.room.room_number }}</strong></td>
+              <td>{{ row.contract.tenant.display_name }}</td>
+              <td>{% if row.latest %}{{ row.latest.billing_month|date:"F Y" }}{% else %}<span class="muted">none yet</span>{% endif %}</td>
+              <td class="row-actions"><a class="btn btn-sm btn-primary" href="{% url 'billing:reading_create' row.contract.pk %}">Record reading</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No occupied rooms yet. A landlord needs to create a contract first.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Reading history</h2>
+  {% if readings %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Month</th><th>Room</th><th>Tenant</th><th class="num">Electricity (kWh)</th><th class="num">Water (m³)</th><th>Recorded by</th><th></th></tr></thead>
+        <tbody>
+          {% for r in readings %}
+            <tr>
+              <td>{{ r.billing_month|date:"M Y" }}</td>
+              <td>{{ r.contract.room.room_number }}</td>
+              <td>{{ r.contract.tenant.display_name }}</td>
+              <td class="num">{{ r.electricity_used|floatformat:"2g" }}</td>
+              <td class="num">{{ r.water_used|floatformat:"2g" }}</td>
+              <td>{{ r.recorded_by.display_name }}</td>
+              <td class="row-actions">
+                {% if not r.block_reason %}
+                  <a class="btn btn-sm" href="{% url 'billing:reading_edit' r.pk %}">Edit</a>
+                  <form method="post" action="{% url 'billing:reading_delete' r.pk %}" class="inline-form"
+                        onsubmit="return confirm('Delete this reading and its bill?');">
+                    {% csrf_token %}<button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+                {% else %}
+                  <span class="muted" title="{{ r.block_reason }}">Locked</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No readings recorded yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

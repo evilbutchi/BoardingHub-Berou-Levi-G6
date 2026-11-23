@@ -7,13 +7,39 @@
   <p class="muted">Welcome, {{ user.display_name }}.</p>
 </div>
 
-<section class="card">
-  <h2>What you'll find here</h2>
-  <ul class="plain-list">
-    <li>Your room details and contract</li>
-    <li>Your monthly bills and what you still owe</li>
-    <li>Your payment history</li>
-  </ul>
-  <p class="muted">Your landlord links your account to a room and contract. See <a href="{% url 'billing:my_contract' %}">My room</a>, or update your <a href="{% url 'accounts:profile' %}">profile</a> any time.</p>
-</section>
+<div class="stats">
+  <div class="stat"><span class="stat-num">{% if contract %}{{ contract.room.room_number }}{% else %}—{% endif %}</span><span class="stat-label">Your room</span></div>
+  <div class="stat"><span class="stat-num">₱{{ outstanding|floatformat:"2g" }}</span><span class="stat-label">You currently owe</span></div>
+  <div class="stat {% if overdue_count %}stat-warn{% endif %}"><span class="stat-num">{{ overdue_count }}</span><span class="stat-label">Overdue bills</span></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2>Recent bills</h2>
+    {% if recent_bills %}
+      <ul class="plain-list">
+        {% for b in recent_bills %}
+          <li><a href="{% url 'billing:bill_detail' b.pk %}">{{ b.billing_month|date:"F Y" }}</a> · ₱{{ b.total_amount|floatformat:"2g" }}
+            <span class="badge badge-{{ b.status }}">{{ b.status_label }}</span></li>
+        {% endfor %}
+      </ul>
+      <div class="actions"><a class="btn" href="{% url 'billing:my_bills' %}">All bills &amp; payments</a></div>
+    {% else %}
+      <p class="muted">No bills yet. They appear after the caretaker records your room's monthly utility reading.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Your room</h2>
+    {% if contract %}
+      <p class="muted">Room {{ contract.room.room_number }} · ₱{{ contract.monthly_rate|floatformat:"2g" }} per month</p>
+    {% else %}
+      <p class="muted">Your landlord hasn't assigned you a room yet.</p>
+    {% endif %}
+    <div class="actions">
+      <a class="btn" href="{% url 'billing:my_contract' %}">Contract details</a>
+      <a class="btn" href="{% url 'accounts:profile' %}">Profile</a>
+    </div>
+  </section>
+</div>
 {% endblock %}

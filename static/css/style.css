@@ -143,3 +143,8 @@ h2 { font-size: 1.1rem; margin: 0 0 8px; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
 .total-row td { font-weight: 700; border-top: 2px solid var(--line); }
 .stat-warn .stat-num { color: var(--danger); }
+.field input[type="number"], .field input[type="date"], .field input[type="month"], .field select {
+  width: 100%; padding: 9px 11px; border: 1px solid #c9d0cb; border-radius: 8px; font: inherit; background: #fff;
+}
+.field input:disabled, .field select:disabled { background: #f0f2f0; color: var(--muted); cursor: not-allowed; }
+.field.has-error input, .field.has-error select { border-color: var(--danger); }

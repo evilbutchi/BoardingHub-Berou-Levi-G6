@@ -32,4 +32,27 @@
     <dt>End date</dt><dd>{% if contract.end_date %}{{ contract.end_date|date:"F j, Y" }}{% else %}Open-ended{% endif %}</dd>
   </dl>
 </section>
+
+<section class="card">
+  <h2>Bills</h2>
+  {% if bills %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Month</th><th class="num">Total</th><th class="num">Balance</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for b in bills %}
+            <tr>
+              <td><a href="{% url 'billing:bill_detail' b.pk %}">{{ b.billing_month|date:"F Y" }}</a></td>
+              <td class="num">₱{{ b.total_amount|floatformat:"2g" }}</td>
+              <td class="num">₱{{ b.balance|floatformat:"2g" }}</td>
+              <td><span class="badge badge-{{ b.status }}">{{ b.status_label }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No bills for this contract yet.</p>
+  {% endif %}
+</section>
 {% endblock %}
