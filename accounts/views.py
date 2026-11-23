@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from .decorators import role_required
+from billing.models import Contract, Room
+
 from .forms import CaretakerCreationForm, ProfileForm, RegistrationForm
 from .models import User
 
@@ -89,6 +91,8 @@ def dashboard_landlord(request):
         "tenant_count": User.objects.filter(role=User.Role.TENANT).count(),
         "caretaker_count": User.objects.filter(role=User.Role.CARETAKER).count(),
         "recent_users": User.objects.exclude(pk=request.user.pk).order_by("-date_joined")[:5],
+        "room_count": Room.objects.count(),
+        "occupied_count": Contract.objects.filter(is_active=True).count(),
     }
     return render(request, "accounts/dashboard_landlord.html", context)
 

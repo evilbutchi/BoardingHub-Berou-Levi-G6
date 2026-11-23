@@ -127,3 +127,19 @@ h2 { font-size: 1.1rem; margin: 0 0 8px; }
   .details { grid-template-columns: 1fr; gap: 2px; }
   .details dd { margin-bottom: 8px; }
 }
+
+/* ---- billing ---- */
+.btn-danger { color: var(--danger); border-color: #e3b8b1; }
+.btn-danger:hover { background: var(--danger-soft); color: var(--danger); }
+.row-actions { white-space: nowrap; text-align: right; }
+.row-actions .inline-form { margin-left: 4px; }
+.badge-occupied, .badge-paid { background: #e4f1ed; color: #17564a; }
+.badge-available, .badge-ended, .badge-unpaid { background: #eceeed; color: #4a5551; }
+.badge-partial { background: #fdf3dc; color: #6b5210; }
+.badge-overdue { background: var(--danger-soft); color: var(--danger); }
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.tabs a { padding: 5px 14px; border-radius: 999px; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); font-size: 0.92rem; }
+.tabs a.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.total-row td { font-weight: 700; border-top: 2px solid var(--line); }
+.stat-warn .stat-num { color: var(--danger); }

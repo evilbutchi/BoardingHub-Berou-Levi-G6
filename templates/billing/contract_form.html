@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{% if contract %}Edit contract{% else %}New contract{% endif %}{% endblock %}
+
+{% block content %}
+<section class="card card-narrow">
+  <h1>{% if contract %}Edit contract{% else %}New contract{% endif %}</h1>
+  {% if not contract %}
+    <p class="muted">Creating a contract marks the room as occupied.</p>
+    {% if no_tenants %}<div class="alert alert-warning">No tenant is free to assign. Tenants register themselves at the Register page, or all of them already have a contract.</div>{% endif %}
+    {% if no_rooms %}<div class="alert alert-warning">No room is available. <a href="{% url 'billing:room_create' %}">Add a room</a> or end an existing contract.</div>{% endif %}
+  {% else %}
+    <p class="muted">Tenant and room are fixed once a contract exists. End this contract and create a new one to change them.</p>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_field.html" with field=form.tenant %}
+    {% include "accounts/_field.html" with field=form.room %}
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.monthly_rate %}
+      {% include "accounts/_field.html" with field=form.deposit %}
+    </div>
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.start_date %}
+      {% include "accounts/_field.html" with field=form.end_date %}
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">{% if contract %}Save changes{% else %}Create contract{% endif %}</button>
+      <a class="btn" href="{% if contract %}{% url 'billing:contract_detail' contract.pk %}{% else %}{% url 'billing:contract_list' %}{% endif %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
