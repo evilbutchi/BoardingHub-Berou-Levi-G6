@@ -10,9 +10,20 @@
 <div class="stats">
   <div class="stat"><span class="stat-num">{{ tenant_count }}</span><span class="stat-label">Registered tenants</span></div>
   <div class="stat"><span class="stat-num">{{ caretaker_count }}</span><span class="stat-label">Caretakers</span></div>
+  <div class="stat"><span class="stat-num">{{ occupied_count }} / {{ room_count }}</span><span class="stat-label">Rooms occupied</span></div>
 </div>
 
 <div class="grid-2">
+  <section class="card">
+    <h2>Rooms and contracts</h2>
+    <p class="muted">Set up rooms, then link each tenant to a room with a contract.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="{% url 'billing:contract_create' %}">New contract</a>
+      <a class="btn" href="{% url 'billing:room_list' %}">Rooms</a>
+      <a class="btn" href="{% url 'billing:contract_list' %}">Contracts</a>
+    </div>
+  </section>
+
   <section class="card">
     <h2>Account management</h2>
     <p class="muted">Create caretaker accounts and review everyone who can sign in.</p>
@@ -36,8 +47,4 @@
   </section>
 </div>
 
-<section class="card card-soft">
-  <h2>Coming in later phases</h2>
-  <p class="muted">Rooms, tenant contracts, utility readings, monthly billing, payments and reports will appear here as they are built.</p>
-</section>
 {% endblock %}

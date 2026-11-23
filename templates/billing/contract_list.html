@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Contracts{% endblock %}
+
+{% block content %}
+<div class="page-head page-head-row">
+  <div>
+    <h1>Contracts</h1>
+    <p class="muted">Each contract fixes a tenant's room, monthly rate and deposit.</p>
+  </div>
+  <a class="btn btn-primary" href="{% url 'billing:contract_create' %}">New contract</a>
+</div>
+
+<div class="tabs">
+  <a href="?status=active" class="{% if status == 'active' %}active{% endif %}">Active</a>
+  <a href="?status=ended" class="{% if status == 'ended' %}active{% endif %}">Ended</a>
+  <a href="?status=all" class="{% if status == 'all' %}active{% endif %}">All</a>
+</div>
+
+<section class="card">
+  {% if contracts %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Tenant</th><th>Room</th><th>Monthly rate</th><th>Deposit</th><th>Period</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for c in contracts %}
+            <tr>
+              <td><a href="{% url 'billing:contract_detail' c.pk %}">{{ c.tenant.display_name }}</a></td>
+              <td>{{ c.room.room_number }}</td>
+              <td>₱{{ c.monthly_rate|floatformat:"2g" }}</td>
+              <td>₱{{ c.deposit|floatformat:"2g" }}</td>
+              <td>{{ c.start_date|date:"M j, Y" }} – {% if c.end_date %}{{ c.end_date|date:"M j, Y" }}{% else %}open{% endif %}</td>
+              <td>{% if c.is_active %}<span class="badge badge-occupied">Active</span>{% else %}<span class="badge badge-ended">Ended</span>{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No {% if status != 'all' %}{{ status }} {% endif %}contracts to show.</p>
+  {% endif %}
+</section>
+{% endblock %}

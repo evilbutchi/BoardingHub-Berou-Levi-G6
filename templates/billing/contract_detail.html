@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Contract{% endblock %}
+
+{% block content %}
+<div class="page-head page-head-row">
+  <div>
+    <h1>{{ contract.tenant.display_name }} · {{ contract.room }}</h1>
+    <p class="muted">{% if contract.is_active %}<span class="badge badge-occupied">Active</span>{% else %}<span class="badge badge-ended">Ended</span>{% endif %}</p>
+  </div>
+  <div class="actions">
+    <a class="btn" href="{% url 'billing:contract_edit' contract.pk %}">Edit</a>
+    {% if contract.is_active %}
+      <form method="post" action="{% url 'billing:contract_end' contract.pk %}" class="inline-form"
+            onsubmit="return confirm('End this contract and free the room?');">
+        {% csrf_token %}<button type="submit" class="btn">End contract</button>
+      </form>
+    {% endif %}
+    <form method="post" action="{% url 'billing:contract_delete' contract.pk %}" class="inline-form"
+          onsubmit="return confirm('Delete this contract permanently?');">
+      {% csrf_token %}<button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+</div>
+
+<section class="card">
+  <dl class="details">
+    <dt>Tenant</dt><dd>{{ contract.tenant.display_name }} (@{{ contract.tenant.username }}) · {{ contract.tenant.contact_number|default:"no contact number" }}</dd>
+    <dt>Room</dt><dd>{{ contract.room.room_number }}{% if contract.room.description %} · {{ contract.room.description }}{% endif %}</dd>
+    <dt>Monthly rate</dt><dd>₱{{ contract.monthly_rate|floatformat:"2g" }}</dd>
+    <dt>Deposit</dt><dd>₱{{ contract.deposit|floatformat:"2g" }}</dd>
+    <dt>Start date</dt><dd>{{ contract.start_date|date:"F j, Y" }}</dd>
+    <dt>End date</dt><dd>{% if contract.end_date %}{{ contract.end_date|date:"F j, Y" }}{% else %}Open-ended{% endif %}</dd>
+  </dl>
+</section>
+{% endblock %}
