@@ -4,15 +4,39 @@
 {% block content %}
 <div class="page-head">
   <h1>Caretaker Dashboard</h1>
-  <p class="muted">Welcome, {{ user.display_name }}. This is your workspace for day-to-day upkeep.</p>
+  <p class="muted">Welcome, {{ user.display_name }}. Record each room's meters once a month.</p>
 </div>
 
-<section class="card">
-  <h2>Your responsibilities</h2>
-  <ul class="plain-list">
-    <li>Record monthly utility readings for each room</li>
-    <li>Log maintenance requests and follow them to completion</li>
-  </ul>
-  <p class="muted">These tools will be added in later phases. For now you can keep your <a href="{% url 'accounts:profile' %}">profile</a> up to date.</p>
-</section>
+<div class="stats">
+  <div class="stat {% if pending %}stat-warn{% endif %}"><span class="stat-num">{{ pending|length }}</span><span class="stat-label">Rooms still to read for {{ month|date:"F Y" }}</span></div>
+  <div class="stat"><span class="stat-num">{{ done_count }}</span><span class="stat-label">Rooms already read</span></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2>To read this month</h2>
+    {% if pending %}
+      <ul class="plain-list">
+        {% for c in pending %}
+          <li>Room {{ c.room.room_number }} · {{ c.tenant.display_name }}
+            <a class="btn btn-sm" href="{% url 'billing:reading_create' c.pk %}">Record</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Nothing left to record for {{ month|date:"F Y" }}.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Your recent readings</h2>
+    {% if my_recent %}
+      <ul class="plain-list">
+        {% for r in my_recent %}<li>{{ r.contract.room }} · {{ r.billing_month|date:"F Y" }}</li>{% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">You haven't recorded any readings yet.</p>
+    {% endif %}
+    <div class="actions"><a class="btn btn-primary" href="{% url 'billing:reading_list' %}">All readings</a></div>
+  </section>
+</div>
 {% endblock %}

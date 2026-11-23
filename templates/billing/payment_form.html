@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{% if payment %}Edit payment{% else %}Record payment{% endif %}{% endblock %}
+
+{% block content %}
+<section class="card card-narrow">
+  <h1>{% if payment %}Edit payment{% else %}Record payment{% endif %}</h1>
+  <p class="muted">{{ bill.billing_month|date:"F Y" }} bill · {{ bill.contract.tenant.display_name }} · {{ bill.contract.room }}<br>
+    Total ₱{{ bill.total_amount|floatformat:"2g" }}</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_field.html" with field=form.amount %}
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.paid_on %}
+      {% include "accounts/_field.html" with field=form.method %}
+    </div>
+    {% include "accounts/_field.html" with field=form.reference %}
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">{% if payment %}Save changes{% else %}Record payment{% endif %}</button>
+      <a class="btn" href="{% url 'billing:bill_detail' bill.pk %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

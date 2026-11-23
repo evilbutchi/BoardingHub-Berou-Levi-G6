@@ -3,10 +3,12 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from .decorators import role_required
-from billing.models import Contract, Room
+from billing.models import Contract, Room, UtilityReading
+from billing.services import bills_with_payments, month_start, summarize
 
 from .forms import CaretakerCreationForm, ProfileForm, RegistrationForm
 from .models import User
@@ -93,18 +95,43 @@ def dashboard_landlord(request):
         "recent_users": User.objects.exclude(pk=request.user.pk).order_by("-date_joined")[:5],
         "room_count": Room.objects.count(),
         "occupied_count": Contract.objects.filter(is_active=True).count(),
+        **summarize(bills_with_payments()),
+        "recent_bills": bills_with_payments()[:5],
     }
     return render(request, "accounts/dashboard_landlord.html", context)
 
 
 @role_required(User.Role.CARETAKER)
 def dashboard_caretaker(request):
-    return render(request, "accounts/dashboard_caretaker.html")
+    month = month_start(timezone.localdate())
+    active = Contract.objects.filter(is_active=True).select_related("tenant", "room")
+    done_ids = set(
+        UtilityReading.objects.filter(billing_month=month, contract__in=active).values_list(
+            "contract_id", flat=True
+        )
+    )
+    context = {
+        "month": month,
+        "pending": [c for c in active if c.pk not in done_ids],
+        "done_count": len(done_ids),
+        "my_recent": UtilityReading.objects.filter(recorded_by=request.user).select_related(
+            "contract__room"
+        )[:5],
+    }
+    return render(request, "accounts/dashboard_caretaker.html", context)
 
 
 @role_required(User.Role.TENANT)
 def dashboard_tenant(request):
-    return render(request, "accounts/dashboard_tenant.html")
+    bills = list(bills_with_payments().filter(contract__tenant=request.user))
+    context = {
+        "contract": Contract.objects.select_related("room")
+        .filter(tenant=request.user, is_active=True)
+        .first(),
+        "recent_bills": bills[:3],
+        **summarize(bills),
+    }
+    return render(request, "accounts/dashboard_tenant.html", context)
 
 
 # --------------------------------------------------------------------- profile
