@@ -740,3 +740,17 @@ class DashboardTests(BillingFlowTestCase):
         self.assertEqual(resp.context["contract"], self.contract)
         self.assertEqual(resp.context["outstanding"], Decimal("3900.00"))
         self.assertContains(resp, "All bills")
+
+
+class SeedDemoTests(BillingTestCase):
+    def test_seed_demo_creates_usable_data_and_can_run_twice(self):
+        from django.core.management import call_command
+
+        call_command("seed_demo", verbosity=0)
+        call_command("seed_demo", verbosity=0)
+        self.assertEqual(Contract.objects.filter(is_active=True, tenant__username="demo_tenant").count(), 1)
+        self.assertEqual(Bill.objects.count(), 2)
+        paid = [b for b in Bill.objects.prefetch_related("payments") if b.status == Bill.Status.PAID]
+        self.assertEqual(len(paid), 1)
+        self.client.login(username="demo_tenant", password="Demo-Pass-1234")
+        self.assertEqual(self.client.get(reverse("billing:my_bills")).status_code, 200)
