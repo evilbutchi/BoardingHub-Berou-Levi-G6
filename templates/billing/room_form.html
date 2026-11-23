@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{% if room %}Edit room{% else %}Add room{% endif %}{% endblock %}
+
+{% block content %}
+<section class="card card-narrow">
+  <h1>{% if room %}Edit {{ room }}{% else %}Add room{% endif %}</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_field.html" with field=form.room_number %}
+    {% include "accounts/_field.html" with field=form.description %}
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">{% if room %}Save changes{% else %}Add room{% endif %}</button>
+      <a class="btn" href="{% url 'billing:room_list' %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

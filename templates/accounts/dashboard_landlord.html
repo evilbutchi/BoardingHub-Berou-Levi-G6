@@ -10,9 +10,47 @@
 <div class="stats">
   <div class="stat"><span class="stat-num">{{ tenant_count }}</span><span class="stat-label">Registered tenants</span></div>
   <div class="stat"><span class="stat-num">{{ caretaker_count }}</span><span class="stat-label">Caretakers</span></div>
+  <div class="stat"><span class="stat-num">{{ occupied_count }} / {{ room_count }}</span><span class="stat-label">Rooms occupied</span></div>
+  <div class="stat"><span class="stat-num">₱{{ outstanding|floatformat:"2g" }}</span><span class="stat-label">Outstanding balance</span></div>
+  <div class="stat {% if overdue_count %}stat-warn{% endif %}"><span class="stat-num">{{ overdue_count }}</span><span class="stat-label">Overdue bills</span></div>
 </div>
 
+<section class="card">
+  <h2>Recent bills</h2>
+  {% if recent_bills %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Month</th><th>Tenant</th><th>Room</th><th class="num">Balance</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for b in recent_bills %}
+            <tr>
+              <td><a href="{% url 'billing:bill_detail' b.pk %}">{{ b.billing_month|date:"M Y" }}</a></td>
+              <td>{{ b.contract.tenant.display_name }}</td>
+              <td>{{ b.contract.room.room_number }}</td>
+              <td class="num">₱{{ b.balance|floatformat:"2g" }}</td>
+              <td><span class="badge badge-{{ b.status }}">{{ b.status_label }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="actions"><a class="btn" href="{% url 'billing:bill_list' %}">All bills</a></div>
+  {% else %}
+    <p class="muted">No bills yet. Bills are generated when a caretaker records a utility reading.</p>
+  {% endif %}
+</section>
+
 <div class="grid-2">
+  <section class="card">
+    <h2>Rooms and contracts</h2>
+    <p class="muted">Set up rooms, then link each tenant to a room with a contract.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="{% url 'billing:contract_create' %}">New contract</a>
+      <a class="btn" href="{% url 'billing:room_list' %}">Rooms</a>
+      <a class="btn" href="{% url 'billing:contract_list' %}">Contracts</a>
+    </div>
+  </section>
+
   <section class="card">
     <h2>Account management</h2>
     <p class="muted">Create caretaker accounts and review everyone who can sign in.</p>
@@ -36,8 +74,4 @@
   </section>
 </div>
 
-<section class="card card-soft">
-  <h2>Coming in later phases</h2>
-  <p class="muted">Rooms, tenant contracts, utility readings, monthly billing, payments and reports will appear here as they are built.</p>
-</section>
 {% endblock %}

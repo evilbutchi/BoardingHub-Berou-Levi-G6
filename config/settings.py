@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts",
+    "billing",
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,11 @@ MESSAGE_TAGS = {
     messages.WARNING: "warning",
     messages.ERROR: "error",
 }
+
+# Billing: utility rates and due date used when a bill is generated from a reading.
+# Each bill keeps a copy of the rates it was made with.
+from decimal import Decimal  # noqa: E402
+
+ELECTRICITY_RATE_PER_KWH = Decimal(os.environ.get("ELECTRICITY_RATE_PER_KWH", "12.00"))
+WATER_RATE_PER_CUBIC_METER = Decimal(os.environ.get("WATER_RATE_PER_CUBIC_METER", "30.00"))
+BILL_DUE_DAY = int(os.environ.get("BILL_DUE_DAY", "10"))  # due on this day of the following month

@@ -15,7 +15,16 @@
         {% if user.is_authenticated %}
           <a href="{{ user.get_dashboard_url }}">Dashboard</a>
           {% if user.is_landlord %}
+            <a href="{% url 'billing:room_list' %}">Rooms</a>
+            <a href="{% url 'billing:contract_list' %}">Contracts</a>
+            <a href="{% url 'billing:reading_list' %}">Readings</a>
+            <a href="{% url 'billing:bill_list' %}">Bills</a>
             <a href="{% url 'accounts:user_list' %}">Accounts</a>
+          {% elif user.is_caretaker %}
+            <a href="{% url 'billing:reading_list' %}">Readings</a>
+          {% elif user.is_tenant %}
+            <a href="{% url 'billing:my_contract' %}">My room</a>
+            <a href="{% url 'billing:my_bills' %}">My bills</a>
           {% endif %}
           <a href="{% url 'accounts:profile' %}">Profile</a>
           <span class="nav-user">

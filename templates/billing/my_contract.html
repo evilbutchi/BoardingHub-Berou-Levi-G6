@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}My room{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>My room</h1>
+  <p class="muted">Your current room and contract details.</p>
+</div>
+
+{% if contract %}
+<section class="card">
+  <dl class="details">
+    <dt>Room</dt><dd>{{ contract.room.room_number }}{% if contract.room.description %} · {{ contract.room.description }}{% endif %}</dd>
+    <dt>Monthly rate</dt><dd>₱{{ contract.monthly_rate|floatformat:"2g" }}</dd>
+    <dt>Deposit</dt><dd>₱{{ contract.deposit|floatformat:"2g" }}</dd>
+    <dt>Start date</dt><dd>{{ contract.start_date|date:"F j, Y" }}</dd>
+    <dt>End date</dt><dd>{% if contract.end_date %}{{ contract.end_date|date:"F j, Y" }}{% else %}Open-ended{% endif %}</dd>
+  </dl>
+</section>
+{% else %}
+<section class="card"><p class="muted">You don't have an active contract yet. Your landlord will assign you a room.</p></section>
+{% endif %}
+
+{% if past %}
+<section class="card">
+  <h2>Past contracts</h2>
+  <ul class="plain-list">
+    {% for c in past %}<li>{{ c.room }} · {{ c.start_date|date:"M j, Y" }} – {{ c.end_date|date:"M j, Y" }}</li>{% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

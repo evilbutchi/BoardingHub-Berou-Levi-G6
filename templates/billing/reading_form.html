@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{% if reading %}Edit reading{% else %}Record reading{% endif %}{% endblock %}
+
+{% block content %}
+<section class="card card-narrow">
+  <h1>{% if reading %}Edit reading{% else %}Record reading{% endif %}</h1>
+  <p class="muted">{{ contract.room }} · {{ contract.tenant.display_name }}</p>
+  {% if not form.latest %}<div class="alert alert-info">This is the first reading for this room. Enter the meters' starting values as "previous".</div>{% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_field.html" with field=form.billing_month %}
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.electricity_previous %}
+      {% include "accounts/_field.html" with field=form.electricity_current %}
+    </div>
+    <div class="grid-2">
+      {% include "accounts/_field.html" with field=form.water_previous %}
+      {% include "accounts/_field.html" with field=form.water_current %}
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">{% if reading %}Save changes{% else %}Save reading &amp; generate bill{% endif %}</button>
+      <a class="btn" href="{% url 'billing:reading_list' %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
